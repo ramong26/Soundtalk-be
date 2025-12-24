@@ -1,0 +1,14 @@
+name: Feature Request
+description: 새로운 기능 제안
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ⚠️ 모든 자동 생성 계획 및 설명은 **반드시 한국어로 작성해주세요**.
+
+  - type: textarea
+    id: context
+    attributes:
+      label: 배경
+      description: 왜 이 기능이 필요한지
+      placeholder: 한국어로 작성해주세요
