@@ -1,4 +1,4 @@
-import { Injectable, ConflictException } from '@nestjs/common';
+import { Injectable, ConflictException, InternalServerErrorException } from '@nestjs/common';
 import { UserService } from 'src/user/services/user.services';
 import * as bcrypt from 'bcrypt';
 import { Provider } from 'src/common/enums/provider.enum';
@@ -11,14 +11,14 @@ export class AuthService {
   async signup(email: string, password: string, passwordConfirm: string, nickname: string) {
     const existingUser = await this.userService.findByEmail(email);
     if (existingUser) {
-      throw new Error('Email already in use');
+      throw new ConflictException('Email already in use');
     }
 
     let hashedPassword: string;
     try {
       hashedPassword = await bcrypt.hash(password, 10);
     } catch {
-      throw new Error('Error hashing password');
+      throw new InternalServerErrorException('Error hashing password');
     }
 
     try {
@@ -28,9 +28,7 @@ export class AuthService {
           accountName: nickname,
           email,
           password: hashedPassword,
-          passwordConfirm: '',
           provider: Provider.LOCAL,
-          providerId: '',
         } as Partial<Account>,
       });
 
@@ -43,7 +41,7 @@ export class AuthService {
       if (error.code === 'ER_DUP_ENTRY' || error.code === '23505') {
         throw new ConflictException('이메일이 이미 등록되었습니다');
       }
-      throw new Error('Error creating user: ' + error.message);
+      throw new InternalServerErrorException('회원가입 중 오류가 발생했습니다');
     }
   }
 }

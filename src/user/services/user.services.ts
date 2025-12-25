@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../entities/user.entity';
 import { Repository } from 'typeorm';
@@ -37,12 +37,18 @@ export class UserService {
 
   // 사용자 업데이트
   async update(id: number, updateData: Partial<User>): Promise<User | null> {
-    await this.userRepository.update(id, updateData);
+    const result = await this.userRepository.update(id, updateData);
+    if (!result.affected) {
+      return null;
+    }
     return this.findById(id);
   }
 
   // 사용자 삭제
   async delete(id: number): Promise<void> {
-    await this.userRepository.delete(id);
+    const result = await this.userRepository.delete(id);
+    if (!result.affected) {
+      throw new NotFoundException('User not found');
+    }
   }
 }

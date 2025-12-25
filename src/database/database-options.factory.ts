@@ -2,8 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
 import { DataSourceOptions, getMetadataArgsStorage } from 'typeorm';
-// import { IDatabaseConfig } from './interfaces';
-// import { DatabaseNamingStrategy } from './strategies';
 
 @Injectable()
 export class DatabaseOptionsFactory implements TypeOrmOptionsFactory {
@@ -25,7 +23,7 @@ export class DatabaseOptionsFactory implements TypeOrmOptionsFactory {
       password: this.configService.get<string>('DB_PASSWORD'),
       database: this.configService.get('DB_DATABASE'),
       timezone: '+09:00',
-      synchronize: true,
+      synchronize: this.configService.get('NODE_ENV') !== 'production',
     };
   }
 }

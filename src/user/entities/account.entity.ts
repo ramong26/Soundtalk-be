@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -9,6 +10,7 @@ import {
 import { User } from './user.entity';
 import { Provider } from 'src/common/enums/provider.enum';
 import { Exclude } from 'class-transformer';
+import { MaxLength } from 'class-validator';
 
 // 옵셔널이 맞는지 이걸 삭제하면 auth.service.ts에서 오류가 남
 @Entity()
@@ -17,9 +19,11 @@ export class Account {
   id?: number;
 
   @Column('varchar', { length: 100 })
+  @MaxLength(100)
   accountName?: string;
 
   @Column('varchar', { length: 255, unique: true })
+  @MaxLength(255)
   email?: string;
 
   @Exclude()
@@ -30,7 +34,7 @@ export class Account {
   provider?: Provider;
 
   @Column({ nullable: true })
-  providerId?: string;
+  providerId?: string | null;
 
   @CreateDateColumn()
   createdAt?: Date;
@@ -39,5 +43,6 @@ export class Account {
   updatedAt?: Date;
 
   @OneToOne(() => User, (user) => user.account)
+  @JoinColumn()
   user?: User;
 }

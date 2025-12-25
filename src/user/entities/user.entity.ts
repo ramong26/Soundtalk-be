@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -17,6 +18,7 @@ export class User {
   id: number;
 
   @Column('varchar', { length: 100 })
+  @MaxLength(100)
   nickname: string;
 
   @Column({ nullable: true })
@@ -34,7 +36,8 @@ export class User {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @OneToOne(() => Account, (account) => account.user, { cascade: true })
+  @OneToOne(() => Account, (account) => account.user, { cascade: true, onDelete: 'CASCADE' })
+  @JoinColumn()
   @Exclude()
   account: Account;
 }
