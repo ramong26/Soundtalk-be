@@ -10,33 +10,34 @@ import { User } from './user.entity';
 import { Provider } from 'src/common/enums/provider.enum';
 import { Exclude } from 'class-transformer';
 
+// 옵셔널이 맞는지 이걸 삭제하면 auth.service.ts에서 오류가 남
 @Entity()
 export class Account {
   @PrimaryGeneratedColumn()
-  id: number;
+  id?: number;
 
   @Column('varchar', { length: 100 })
-  accountName: string;
+  accountName?: string;
 
   @Column('varchar', { length: 255, unique: true })
-  email: string;
+  email?: string;
 
   @Exclude()
   @Column({ nullable: true })
-  password: string;
+  password?: string;
 
   @Column({ type: 'enum', enum: Provider, nullable: true })
-  provider: Provider;
+  provider?: Provider;
 
   @Column({ nullable: true })
-  providerId: string;
+  providerId?: string;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt?: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt?: Date;
 
   @OneToOne(() => User, (user) => user.account)
-  user: User;
+  user?: User;
 }
