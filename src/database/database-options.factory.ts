@@ -12,6 +12,7 @@ export class DatabaseOptionsFactory implements TypeOrmOptionsFactory {
   createTypeOrmOptions(): TypeOrmModuleOptions {
     return {
       ...this.createDataSourceOptions(),
+      autoLoadEntities: true,
       entities: getMetadataArgsStorage().tables.map((table) => table.target),
     };
   }
